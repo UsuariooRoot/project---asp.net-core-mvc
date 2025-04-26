@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewData["Title"] - Farmacia</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/principal.css"/>
+</head>
+<body>
+    <header>
+        <h1>FARMACIA</h1>
+    </header>
+    <nav>
+        <div class="">
+            <a asp-controller="Productos" asp-action="Index">Inicio</a>
+            <a asp-controller="Productos" asp-action="Categoria" asp-route-idcategoria="1">Pastillas</a>
+            <a asp-controller="Productos" asp-action="Categoria" asp-route-idcategoria="2">Jarabes</a>
+            <a asp-controller="Productos" asp-action="Categoria" asp-route-idcategoria="3">Pañales</a>
+            <a asp-controller="Productos" asp-action="Categoria" asp-route-idcategoria="4">Perfumes</a>
+            <a asp-controller="Productos" asp-action="Categoria" asp-route-idcategoria="5">Jabones</a>
+
+
+            <a asp-controller="Carrito" asp-action="VerCarrito">🛒 Carrito</a>
+
+
+            @if (User.IsInRole("Administrador"))
+            {
+                <div class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Mantenimiento</a>
+                    <ul class="dropdown-menu">
+                        <li><a asp-controller="MantenientoProducto" asp-action="Index">Productos</a></li>
+                        <li><a asp-controller="MantenimientoUsuario" asp-action="Index">Usuarios</a></li>
+                    </ul>
+                </div>
+
+                <a asp-controller="Reportes" asp-action="VentasPorUsuario">Reportes</a>
+            }
+
+
+            @if (User.Identity?.IsAuthenticated ?? false)
+            {
+                <div class="dropdown" style="display: inline-block;">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        👋 Hola, @User.Identity.Name
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a asp-controller="Auth" asp-action="CerrarSesion">Cerrar Sesión</a></li>
+                    </ul>
+                </div>
+            }
+            else
+            {
+                <div class="dropdown" style="display: inline-block;">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cuenta</a>
+                    <ul class="dropdown-menu">
+                        <li><a asp-controller="Auth" asp-action="Login">Iniciar Sesion</a></li>
+                        <li><a asp-controller="Auth" asp-action="Registro">Registrarse</a></li>
+                    </ul>
+                </div>
+            }
+
+        </div>
+
+    </nav>
+    <div>
+        @RenderBody()
+    </div>
+    <footer>
+        <div>
+            Farmacia SAC <br />
+            Telefono: 125-2547 <br />
+            Direccion: Av.nicolas, San Isidro
+        </div>
+
+    </footer>
+</body>
+</html>

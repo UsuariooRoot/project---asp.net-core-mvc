@@ -1,0 +1,115 @@
+﻿body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+header {
+    background-color: #009688;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+    header h1 {
+        margin: 0;
+        font-size: 3em;
+        letter-spacing: 1px;
+    }
+
+/* Estilos del navbar */
+nav {
+    background-color: #333;
+    padding: 10px 0;
+    font-size: 18px;
+}
+
+    nav a {
+        color: white;
+        padding: 12px 20px;
+        text-decoration: none;
+        text-transform: uppercase;
+        display: inline-block;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+        nav a:hover {
+            background-color: #009688;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+    nav .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    nav .dropdown-menu {
+        display: none;
+        position: absolute;
+        background-color: #333;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        z-index: 1;
+    }
+
+    nav .dropdown:hover .dropdown-menu {
+        display: block;
+    }
+
+    nav .dropdown-menu li {
+        padding: 10px 20px;
+    }
+
+        nav .dropdown-menu li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s;
+        }
+
+            nav .dropdown-menu li a:hover {
+                background-color: #009688;
+                border-radius: 5px;
+            }
+
+/* Estilos del footer */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+}
+
+    footer div {
+        font-size: 16px;
+    }
+
+/* Estilos para un contenedor central */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    nav a {
+        padding: 12px 15px;
+        font-size: 16px;
+    }
+
+    nav .dropdown-menu {
+        position: static;
+        display: block;
+    }
+
+    header h1 {
+        font-size: 2.5em;
+    }
+}

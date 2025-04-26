@@ -1,0 +1,73 @@
+﻿.edit-form-container {
+    background: linear-gradient(145deg, #ffffff, #f0f0f0);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+}
+
+    .edit-form-container:hover {
+        transform: scale(1.01);
+    }
+
+.form-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #34495e;
+}
+
+.form-control,
+.control-select {
+    border-radius: 10px;
+    padding: 0.6rem 1rem;
+    border: 1px solid #ccc;
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+    .form-control:focus,
+    .control-select:focus {
+        border-color: #4e54c8;
+        box-shadow: 0 0 0 0.25rem rgba(78, 84, 200, 0.3);
+    }
+
+.btn-primary {
+    background: linear-gradient(to right, #4e54c8, #8f94fb);
+    border: none;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 0.5rem 1.5rem;
+}
+
+    .btn-primary:hover {
+        background: linear-gradient(to right, #3b41c5, #7c83f5);
+    }
+
+.btn-danger {
+    background: linear-gradient(to right, #ff416c, #ff4b2b);
+    border: none;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 0.5rem 1.5rem;
+}
+
+    .btn-danger:hover {
+        background: linear-gradient(to right, #ff2e5d, #ff3c1a);
+    }
+
+.text-danger {
+    font-size: 0.9rem;
+}
+
+.alert-message {
+    margin-top: 2rem;
+    text-align: center;
+    font-weight: bold;
+    color: #2980b9;
+}

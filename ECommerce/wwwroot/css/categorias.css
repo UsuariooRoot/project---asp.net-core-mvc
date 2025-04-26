@@ -1,0 +1,100 @@
+﻿.btn-gradient-primary {
+    background: linear-gradient(45deg, #ff7a00, #ff3e00);
+    color: white;
+    border: none;
+}
+
+    .btn-gradient-primary:hover {
+        background: linear-gradient(45deg, #ff3e00, #ff7a00);
+        color: white;
+        box-shadow: 0 4px 8px rgba(255, 62, 0, 0.5);
+    }
+
+.form-filtrar {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+    .form-filtrar em {
+        font-weight: bold;
+        color: #00796b;
+        margin-bottom: 8px;
+    }
+
+    .form-filtrar input[type="text"] {
+        padding: 10px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        width: 100%;
+        box-sizing: border-box;
+        transition: border-color 0.3s ease-in-out;
+    }
+
+        .form-filtrar input[type="text"]:focus {
+            border-color: #00796b;
+            outline: none;
+        }
+
+    .form-filtrar button {
+        padding: 12px 20px;
+        background-color: #009688;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+        .form-filtrar button:hover {
+            background-color: #00796b;
+            transform: scale(1.05);
+        }
+
+        .form-filtrar button:active {
+            background-color: #004d40;
+        }
+
+/* Personalización de la paginación */
+.pagination-link {
+    display: inline-block;
+    margin: 0 5px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #007bff;
+    background-color: white;
+    border: 1px solid #007bff;
+}
+
+    .pagination-link:hover {
+        background-color: #007bff;
+        color: white;
+    }
+
+/* Efecto en las tarjetas */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .card:hover {
+        transform: scale(1.05);
+        box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.1);
+    }
+
+/* Estilo para el texto de no productos encontrados */
+.text-muted {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
