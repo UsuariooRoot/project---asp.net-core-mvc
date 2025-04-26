@@ -3,19 +3,29 @@ using ECommerce.Services.Interfaces;
 
 namespace ECommerce.Controllers
 {
-    public class HomeController(IUsuarioService usuarioService) : Controller
+    public class HomeController(IArticuloService articuloService) : Controller
     {
-        private readonly IUsuarioService _usuarioService = usuarioService;
+        private readonly IArticuloService _articuloService = articuloService;
+        //private readonly IUsuarioService _usuarioService = usuarioService;
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? categoria, string? nombre, int? pagina, int? size)
         {
-            var usuarios = await _usuarioService.ObtenerTodosAsync();
-            return View(usuarios);
-        }
+            Console.WriteLine("pagina: " + pagina + " size: " + size);
+            pagina ??= 1;
+            size ??= 10;
 
-        public IActionResult Logout()
-        {
-            return View();
+            ViewBag.p = pagina;
+
+            if (nombre != null || categoria != null)
+            {
+                categoria ??= 0;
+                return View(await _articuloService.BuscarPorAsync((int)categoria, nombre, (int)pagina, (int)size));
+            }
+
+            var articulos = await _articuloService.ObtenerTodoAsync((int)pagina, (int)size);
+
+
+            return View(articulos.ToList());
         }
     }
 }

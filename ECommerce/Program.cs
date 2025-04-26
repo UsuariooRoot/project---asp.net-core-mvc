@@ -8,14 +8,14 @@ using ECommerce.Services.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 
 // Registrar repositorios
-//builder.Services.AddScoped<IArticuloRepository, ArticuloRepository>();
+builder.Services.AddScoped<IArticuloRepository, ArticuloRepository>();
 //builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 //builder.Services.AddScoped<ICarritoRepository, CarritoRepository>();
 //builder.Services.AddScoped<IReporteRepository, ReporteRepository>();
 
 // Registrar servicios
-//builder.Services.AddScoped<IArticuloService, ArticuloService>();
+builder.Services.AddScoped<IArticuloService, ArticuloService>();
 //builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
