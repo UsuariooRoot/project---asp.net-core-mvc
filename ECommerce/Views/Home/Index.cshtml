@@ -1,25 +1,23 @@
-﻿@model IEnumerable<ECommerce.Models.Articulo>
+﻿@model ECommerce.Helpers.Pageable<ECommerce.Models.Articulo>
 
 @{
     ViewData["Title"] = "Comprar artículos";
     <link rel="stylesheet" href="/css/index.css" />
 }
 
-@* diplock *@
 <form asp-action="Index" asp-controller="Home" class="form-filtrar">
     <em>Buscar por nombre:</em>
-    @Html.TextBox("nombre", "")
-    <button type="submit" class="btn-filtrar">Filtrar</button>
+    @Html.TextBox("nombre", ViewBag.Nombre as string)
+    <button type="submit" class="btn btn-primary">Filtrar</button>
 </form>
 
 <hr />
 
-
 <div class="productos-container">
-    @if (Model != null && Model.Any())
+    @if (Model != null && Model.Items.Any())
     {
         <div class="productos-grid">
-            @foreach (var item in Model)
+            @foreach (var item in Model.Items)
             {
                 <div class="producto">
                     <img src="@Url.Content($"~/img/{item.IdArticulo}.jpg")" alt="@item.Nombre" />
@@ -41,22 +39,101 @@
             }
         </div>
 
-        <!-- Paginación -->
-        @* <div class="pagination"> *@
-        @*     @for (int i = 0; i < (int)ViewBag.pags; i++) *@
-        @*     { *@
-        @*         <a asp-action="Index" *@
-        @*            asp-route-nombre=@ViewBag.nombre *@
-        @*            asp-route-p=@i *@
-        @*            class="@(i == (int)ViewBag.p ? "btn btn-success active" : "btn btn-primary")"> *@
-        @*             @(i + 1) *@
-        @*         </a> *@
-        @*     } *@
-        @* </div> *@
+        <!-- Paginación con Bootstrap -->
+        <div class="d-flex justify-content-center mt-4">
+            <nav aria-label="Navegación de páginas">
+                <ul class="pagination">
+                    <!-- Botón anterior -->
+                    <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                        <a class="page-link"
+                           asp-action="Index"
+                           asp-route-nombre="@ViewBag.Nombre"
+                           asp-route-pagina="@(Model.CurrentPage - 1)"
+                           asp-route-size="@Model.PageSize">
+                            Anterior
+                        </a>
+                    </li>
+
+                    <!-- Números de página -->
+                    @{
+                        int startPage = Math.Max(1, Model.CurrentPage - 2);
+                        int endPage = Math.Min(Model.TotalPages, Model.CurrentPage + 2);
+
+                        if (startPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link"
+                                   asp-action="Index"
+                                   asp-route-nombre="@ViewBag.Nombre"
+                                   asp-route-categoria="@ViewBag.Categoria"
+                                   asp-route-pagina="1"
+                                   asp-route-size="@Model.PageSize">1</a>
+                            </li>
+                            if (startPage > 2)
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            }
+                        }
+
+                        for (int i = startPage; i <= endPage; i++)
+                        {
+                            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                <a class="page-link"
+                                   asp-action="Index"
+                                   asp-route-nombre="@ViewBag.Nombre"
+                                   asp-route-categoria="@ViewBag.Categoria"
+                                   asp-route-pagina="@i"
+                                   asp-route-size="@Model.PageSize">@i</a>
+                            </li>
+                        }
+
+                        if (endPage < Model.TotalPages)
+                        {
+                            if (endPage < Model.TotalPages - 1)
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            }
+                            <li class="page-item">
+                                <a class="page-link"
+                                   asp-action="Index"
+                                   asp-route-nombre="@ViewBag.Nombre"
+                                   asp-route-categoria="@ViewBag.Categoria"
+                                   asp-route-pagina="@Model.TotalPages"
+                                   asp-route-size="@Model.PageSize">@Model.TotalPages</a>
+                            </li>
+                        }
+                    }
+
+                    <!-- Botón siguiente -->
+                    <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                        <a class="page-link"
+                           asp-action="Index"
+                           asp-route-nombre="@ViewBag.Nombre"
+                           asp-route-categoria="@ViewBag.Categoria"
+                           asp-route-pagina="@(Model.CurrentPage + 1)"
+                           asp-route-size="@Model.PageSize">
+                            Siguiente
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Información de paginación -->
+        <div class="text-center mt-2">
+            <small class="text-muted">
+                Mostrando @((Model.CurrentPage - 1) * Model.PageSize + 1) -
+                @(Math.Min(Model.CurrentPage * Model.PageSize, Model.TotalItems))
+                de @Model.TotalItems artículos
+            </small>
+        </div>
     }
     else
     {
-        <p>No se encontraron articulos</p>
+        <div class="alert alert-info">No se encontraron artículos</div>
     }
 </div>
-

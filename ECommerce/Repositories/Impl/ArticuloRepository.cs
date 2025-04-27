@@ -62,6 +62,29 @@ namespace ECommerce.Repositories.Impl
             return temporal[0];
         }
 
+        public async Task<int> GetTotalCountAsync(int idcategoria = 0, string? nombre = null)
+        {
+            int count = 0;
+            using (var cn = CreateConnection())
+            {
+                await cn.OpenAsync();
+                SqlCommand cmd = new("usp_contar_articulos", cn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                if (idcategoria > 0)
+                {
+                    cmd.Parameters.AddWithValue("@id_categoria", idcategoria);
+                }
+                if (!string.IsNullOrEmpty(nombre))
+                {
+                    cmd.Parameters.AddWithValue("@nombre", nombre);
+                }
+                count = (int)await cmd.ExecuteScalarAsync();
+            }
+            return count;
+        }
+
         public async Task<IEnumerable<Articulo>> BuscarPorAsync(int idcategoria = 0, string? nombre = null, int numPagina = 1, int tamPagina = 10)
         {
             List<Articulo> temporal = [];
@@ -153,6 +176,30 @@ namespace ECommerce.Repositories.Impl
                 catch (SqlException ex) { mensaje = ex.Message; }
             }
             return mensaje;
+        }
+
+        public async Task<IEnumerable<Categoria>> GetCategoriasAsync()
+        {
+            List<Categoria> categorias = [];
+            using (var cn = CreateConnection())
+            {
+                await cn.OpenAsync();
+                SqlCommand cmd = new("usp_listar_categorias", cn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                SqlDataReader dr = await cmd.ExecuteReaderAsync();
+                while (await dr.ReadAsync())
+                {
+                    categorias.Add(new Categoria
+                    {
+                        IdCategoria = dr.GetInt32(0),
+                        Nombre = dr.GetString(1)
+                    });
+                }
+                await dr.CloseAsync();
+            }
+            return categorias;
         }
     }
 }

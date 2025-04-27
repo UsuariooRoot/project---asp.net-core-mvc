@@ -1,31 +1,31 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ECommerce.Services.Interfaces;
+using ECommerce.Models;
+using ECommerce.Helpers;
 
 namespace ECommerce.Controllers
 {
     public class HomeController(IArticuloService articuloService) : Controller
     {
         private readonly IArticuloService _articuloService = articuloService;
-        //private readonly IUsuarioService _usuarioService = usuarioService;
 
-        public async Task<IActionResult> Index(int? categoria, string? nombre, int? pagina, int? size)
+        public async Task<IActionResult> Index(string? nombre, int pagina = 1, int size = 10)
         {
-            Console.WriteLine("pagina: " + pagina + " size: " + size);
-            pagina ??= 1;
-            size ??= 10;
+            ViewBag.Nombre = nombre;
+            ViewBag.Size = size;
 
-            ViewBag.p = pagina;
+            Pageable<Articulo> resultado;
 
-            if (nombre != null || categoria != null)
+            if (nombre != null)
             {
-                categoria ??= 0;
-                return View(await _articuloService.BuscarPorAsync((int)categoria, nombre, (int)pagina, (int)size));
+                resultado = await _articuloService.BuscarPorAsync(0, nombre, pagina, size);
+            }
+            else
+            {
+                resultado = await _articuloService.ObtenerTodoAsync(pagina, size);
             }
 
-            var articulos = await _articuloService.ObtenerTodoAsync((int)pagina, (int)size);
-
-
-            return View(articulos.ToList());
+            return View(resultado);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using ECommerce.Models;
+﻿using ECommerce.Helpers;
+using ECommerce.Models;
 using ECommerce.Repositories.Interfaces;
 using ECommerce.Services.Interfaces;
 
@@ -8,34 +9,52 @@ namespace ECommerce.Services.Impl
     {
         private readonly IArticuloRepository _articuloRepository = articuloRepository;
 
-        public Task<IEnumerable<Articulo>> ObtenerTodoAsync(int numPagina, int tamanoPagina)
+        public async Task<Pageable<Articulo>> ObtenerTodoAsync(int numPagina, int tamanoPagina)
         {
-            return _articuloRepository.BuscarPorAsync(0, null, numPagina, tamanoPagina);
+            var articulos = await _articuloRepository.BuscarPorAsync(0, null, numPagina, tamanoPagina);
+            int totalItems = await _articuloRepository.GetTotalCountAsync();
+
+            return new Pageable<Articulo>
+            {
+                Items = articulos,
+                CurrentPage = numPagina,
+                PageSize = tamanoPagina,
+                TotalItems = totalItems
+            };
         }
 
-        public Task<IEnumerable<Articulo>> BuscarPorAsync(int idCategoria, string? nombre, int numPagina, int tamanoPagina)
+        public async Task<Pageable<Articulo>> BuscarPorAsync(int idCategoria, string? nombre, int numPagina, int tamanoPagina)
         {
-            return _articuloRepository.BuscarPorAsync(idCategoria, nombre, numPagina, tamanoPagina);
+            var articulos = await _articuloRepository.BuscarPorAsync(idCategoria, nombre, numPagina, tamanoPagina);
+            int totalItems = await _articuloRepository.GetTotalCountAsync(idCategoria, nombre);
+
+            return new Pageable<Articulo>
+            {
+                Items = articulos,
+                CurrentPage = numPagina,
+                PageSize = tamanoPagina,
+                TotalItems = totalItems
+            };
         }
 
-        public Task<string> ActualizarArticuloAsync(Articulo articulo)
+        public async Task<Articulo> ObtenerPorIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _articuloRepository.GetByIdAsync(id);
         }
 
-        public Task<string> AgregarArticuloAsync(Articulo articulo)
+        public async Task<string> AgregarArticuloAsync(Articulo articulo)
         {
-            throw new NotImplementedException();
+            return await _articuloRepository.GuardarAsync(articulo);
         }
 
-        public Task<string> EliminarArticuloAsync(int id)
+        public async Task<string> ActualizarArticuloAsync(Articulo articulo)
         {
-            throw new NotImplementedException();
+            return await _articuloRepository.GuardarAsync(articulo);
         }
 
-        public Task<Articulo> ObtenerPorIdAsync(int id)
+        public async Task<string> EliminarArticuloAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _articuloRepository.EliminarAsync(id);
         }
     }
 }
