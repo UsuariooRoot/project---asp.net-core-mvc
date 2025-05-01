@@ -13,12 +13,12 @@
     </header>
     <nav>
         <div class="">
-            <a asp-controller="Productos" asp-action="Index">Inicio</a>
-            <a asp-controller="Productos" asp-action="Categoria" asp-route-idcategoria="1">Pastillas</a>
-            <a asp-controller="Productos" asp-action="Categoria" asp-route-idcategoria="2">Jarabes</a>
-            <a asp-controller="Productos" asp-action="Categoria" asp-route-idcategoria="3">Pañales</a>
-            <a asp-controller="Productos" asp-action="Categoria" asp-route-idcategoria="4">Perfumes</a>
-            <a asp-controller="Productos" asp-action="Categoria" asp-route-idcategoria="5">Jabones</a>
+            <a href="/">Inicio</a>
+            <a asp-action="Categoria" asp-route-categoria="1">Pastillas</a>
+            <a asp-action="Categoria" asp-route-categoria="2">Jarabes</a>
+            <a asp-action="Categoria" asp-route-categoria="3">Pañales</a>
+            <a asp-action="Categoria" asp-route-categoria="4">Perfumes</a>
+            <a asp-action="Categoria" asp-route-categoria="5">Jabones</a>
 
 
             <a asp-controller="Carrito" asp-action="VerCarrito">🛒 Carrito</a>
@@ -29,7 +29,7 @@
                 <div class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Mantenimiento</a>
                     <ul class="dropdown-menu">
-                        <li><a asp-controller="MantenientoProducto" asp-action="Index">Productos</a></li>
+                        <li><a asp-controller="MantenientoProducto" asp-action="Index">Home</a></li>
                         <li><a asp-controller="MantenimientoUsuario" asp-action="Index">Usuarios</a></li>
                     </ul>
                 </div>

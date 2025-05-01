@@ -27,5 +27,21 @@ namespace ECommerce.Controllers
 
             return View(resultado);
         }
+
+        [Route("Categoria/{categoria:int}")]
+        public async Task<IActionResult> Categoria(int categoria, string? nombre, int pagina = 1, int size = 10)
+        {
+            if (categoria < 0)
+            {
+                return RedirectToAction("Index", new { nombre });
+            }
+
+            ViewBag.Nombre = nombre;
+            ViewBag.Size = size;
+
+            Pageable<Articulo> resultado = await _articuloService.BuscarPorAsync(categoria, nombre, pagina, size);
+
+            return View("Index", resultado);
+        }
     }
 }

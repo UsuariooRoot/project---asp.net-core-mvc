@@ -1,0 +1,52 @@
+﻿@model List<ECommerce.Models.Carrito>
+
+@{
+    ViewData["Title"] = "ConfirmarCompra";
+    decimal total = Model.Sum(x => x.Subtotal);
+}
+
+<h2>📦 Confirmar Compra</h2>
+
+<form asp-action="ConfirmarCompra" method="post">
+    <div class="mb-3">
+        <label class="form-label">Selecciona el método de entrega:</label>
+        <select name="metodoEntrega" class="form-select" required>
+            <option value="">-- Seleccionar --</option>
+            <option value="Recoger en tienda">Recoger en tienda</option>
+            <option value="Delivery a domicilio">Delivery a domicilio</option>
+        </select>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Nombre</td>
+                    <td>@item.Cantidad</td>
+                    <td>@item.Precio.ToString("C", new System.Globalization.CultureInfo("es-PE"))</td>
+                    <td>@item.Subtotal.ToString("C", new System.Globalization.CultureInfo("es-PE"))</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-end fw-bold">Total:</td>
+                <td class="fw-bold">@total.ToString("C", new System.Globalization.CultureInfo("es-PE"))</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="text-end">
+        <button type="submit" class="btn btn-primary">Pagar</button>
+    </div>
+</form>
+

@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IArticuloRepository, ArticuloRepository>();
 //builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
-//builder.Services.AddScoped<ICarritoRepository, CarritoRepository>();
+builder.Services.AddScoped<ICarritoRepository, CarritoRepository>();
 //builder.Services.AddScoped<IReporteRepository, ReporteRepository>();
 
 // Registrar servicios
@@ -19,7 +19,7 @@ builder.Services.AddScoped<IArticuloService, ArticuloService>();
 //builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-//builder.Services.AddScoped<ICarritoService, CarritoService>();
+builder.Services.AddScoped<ICarritoService, CarritoService>();
 //builder.Services.AddScoped<IReporteService, ReporteService>();
 
 builder.Services.AddSingleton<IDbConnectionFactory, SqlConnectionFactory>();
@@ -55,6 +55,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Auth}/{action=Index}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

@@ -1,0 +1,43 @@
+﻿@model List<ECommerce.Models.Carrito>
+@{
+    ViewData["Title"] = "VerCarrito";
+}
+
+<h2>🛒 Carrito de compras</h2>
+
+@if (!Model.Any())
+{
+    <p>No hay productos en tu carrito.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Nombre</td>
+                    <td>@item.Precio.ToString("C", new System.Globalization.CultureInfo("es-PE"))</td>
+                    <td>@item.Cantidad</td>
+                    <td>@item.Subtotal.ToString("C", new System.Globalization.CultureInfo("es-PE"))</td>
+                    <td>
+                        <a asp-action="Aumentar" asp-route-id="@item.IdArticulo" class="btn btn-sm btn-success">+</a>
+                        <a asp-action="Disminuir" asp-route-id="@item.IdArticulo" class="btn btn-sm btn-warning">-</a>
+                        <a asp-action="Eliminar" asp-route-id="@item.IdArticulo" class="btn btn-sm btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <h4>Total: <strong class="text-success">@ViewBag.Total.ToString("C", new System.Globalization.CultureInfo("es-PE"))</strong></h4>
+    <a asp-action="ConfirmarCompra" class="btn btn-primary">Proceder a pagar</a>
+}
