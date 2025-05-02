@@ -9,7 +9,7 @@ namespace ECommerce.Services.Impl
 
         public async Task<Usuario> Login(string username, string pass)
         {
-            var usuario = await _usuarioService.BuscarUsuarioPorAsync(null, username, username);
+            var usuario = await _usuarioService.GetUserByUsernameOrEmailAsync(username);
 
             // diplock -> Usar BCrypt.Verify en producción
             if (usuario != null && pass != usuario.Pass)

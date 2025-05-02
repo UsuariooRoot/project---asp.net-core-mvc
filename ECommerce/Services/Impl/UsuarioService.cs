@@ -13,13 +13,14 @@ namespace ECommerce.Services.Impl
             return await _usuarioRepository.GetAllAsync();
         }
 
-        public async Task<Usuario> BuscarUsuarioPorAsync(int? idUsuario = null, string? username = null, string? email = null)
-        {
-            if (idUsuario != null)
+        public async Task<Usuario?> GetUserByUsernameOrEmailAsync(string input)
+        {   
+            if (input != null)
             {
-                return await _usuarioRepository.GetByIdAsync((int)idUsuario);
+                return await _usuarioRepository.GetByUsernameAsync(input);
             }
-            return await _usuarioRepository.BuscarPorAsync(username, email);
+            
+            return null;
         }
 
         public async Task<string> RegistrarUsuarioAsync(string username, string email, string pass, List<int> roles)

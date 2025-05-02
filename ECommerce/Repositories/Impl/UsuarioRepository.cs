@@ -17,8 +17,7 @@ namespace ECommerce.Repositories.Impl
                 Id = dr.GetInt32(0),
                 Username = dr.GetString(1),
                 Email = dr.GetString(2),
-                Pass = dr.GetString(3),
-                FechaCreacion = dr.GetDateTime(4)
+                Pass = dr.GetString(3)
             };
         }
 
@@ -75,11 +74,11 @@ namespace ECommerce.Repositories.Impl
             return null;
         }
 
-        public async Task<Usuario> BuscarPorAsync(string? username = null, string? email = null)
+        public async Task<Usuario?> GetByUsernameAsync(string username)
         {
             using var cn = CreateConnection();
             await cn.OpenAsync();
-            using var cmd = new SqlCommand("usp_buscar_usuario", cn)
+            using var cmd = new SqlCommand("usp_obtener_usuario_por_nombre_o_email", cn)
             {
                 CommandType = CommandType.StoredProcedure
             };
@@ -87,11 +86,6 @@ namespace ECommerce.Repositories.Impl
             if (username != null)
             {
                 cmd.Parameters.AddWithValue("@username", username);
-            }
-
-            if (email != null)
-            {
-                cmd.Parameters.AddWithValue("@email", email);
             }
 
             using var dr = await cmd.ExecuteReaderAsync();
