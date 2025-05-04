@@ -4,7 +4,9 @@ namespace ECommerce.Services.Interfaces
 {
     public interface IAuthService
     {
-        Task<string> Register(string username, string email, string pass);
-        Task<Usuario> Login(string username, string pass);
+        Task<Usuario?> AuthenticateAsync(string username, string password);
+        Task<bool> RegisterUserAsync(string username, string email, string password, List<int> roles);
+        string HashPassword(string password);
+        bool VerifyPassword(string password, string hashedPassword);
     }
 }

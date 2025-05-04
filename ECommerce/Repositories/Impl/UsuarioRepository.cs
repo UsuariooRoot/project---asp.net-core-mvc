@@ -84,7 +84,7 @@ namespace ECommerce.Repositories.Impl
             return user;
         }
 
-        public async Task<string> RegistrarAsync(string username, string email, string pass, List<int> roles)
+        public async Task<string> SaveAsync(string username, string email, string pass, List<int> roles)
         {
             using var cn = CreateConnection();
             try
@@ -134,7 +134,7 @@ namespace ECommerce.Repositories.Impl
             return roles;
         }
 
-        public async Task<string> EliminarAsync(int id)
+        public async Task<string> DeleteAsync(int id)
         {
             using var cn = CreateConnection();
             await cn.OpenAsync();

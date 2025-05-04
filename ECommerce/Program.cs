@@ -27,13 +27,16 @@ builder.Services.AddSingleton<IDbConnectionFactory, SqlConnectionFactory>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Cuenta/Login";
-        options.AccessDeniedPath = "/Cuenta/AccesoDenegado";
+        options.LoginPath = "/Account/Login";
+        options.AccessDeniedPath = "/Account/AccesoDenegado";
+        options.ExpireTimeSpan = TimeSpan.FromDays(7);
+        options.SlidingExpiration = true;
     });
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddSession();
 
-builder.Services.AddAuthorization();
 builder.Services.AddControllersWithViews();
 
 
@@ -51,6 +54,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseSession();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

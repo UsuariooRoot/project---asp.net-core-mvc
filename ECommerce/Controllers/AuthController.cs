@@ -20,7 +20,7 @@ namespace ECommerce.Controllers
         {
             try
             {
-                await _authService.Register(username, email, pass);
+                await _authService.RegisterUserAsync(username, email, pass, [1]);
                 return RedirectToAction("Login");
             }
             catch (Exception ex)
@@ -30,15 +30,12 @@ namespace ECommerce.Controllers
             }
         }
 
-        public IActionResult Login()
-        {
-            return View();
-        }
+        public IActionResult Login() => View();
 
         [HttpPost]
         public async Task<IActionResult> Login(string username, string pass)
         {
-            var user = await _authService.Login(username, pass);
+            var user = await _authService.AuthenticateAsync(username, pass);
 
             if (user == null)
             {
@@ -59,7 +56,14 @@ namespace ECommerce.Controllers
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                principal,
+                new AuthenticationProperties
+                {
+                    IsPersistent = true, // Para que la cookie persista más allá de la sesión del navegador
+                    ExpiresUtc = DateTime.UtcNow.AddDays(7) // Expiración de la cookie
+                });
 
             return RedirectToAction("Index", "Home");
         }
@@ -67,7 +71,7 @@ namespace ECommerce.Controllers
         public async Task<IActionResult> CerrarSesion()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Logout", "Home");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

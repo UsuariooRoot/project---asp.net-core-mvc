@@ -8,7 +8,7 @@ namespace ECommerce.Services.Impl
     {
         private readonly IUsuarioRepository _usuarioRepository = usuarioRepository;
 
-        public async Task<IEnumerable<Usuario>> ObtenerTodosAsync()
+        public async Task<IEnumerable<Usuario>> GetAllUsersAsync()
         {
             return await _usuarioRepository.GetAllAsync();
         }
@@ -23,7 +23,7 @@ namespace ECommerce.Services.Impl
             return null;
         }
 
-        public async Task<string> RegistrarUsuarioAsync(string username, string email, string pass, List<int> roles)
+        public async Task<string> RegisterUserAsync(string username, string email, string pass, List<int> roles)
         {
             if (roles == null || roles.Count > 0)
             {
@@ -31,17 +31,12 @@ namespace ECommerce.Services.Impl
                 roles = [1];
             }
 
-            return await _usuarioRepository.RegistrarAsync(username, email, pass, roles);
+            return await _usuarioRepository.SaveAsync(username, email, pass, roles);
         }
-
-        //public async Task<List<string>> ObtenerRolesUsuarioAsync(int idUsuario)
-        //{
-        //    return await _usuarioRepository.ObtenerRolesUsuarioAsync(idUsuario);
-        //}
 
         public async Task<string> EliminarUsuarioAsync(int id)
         {
-            return await _usuarioRepository.EliminarAsync(id);
+            return await _usuarioRepository.DeleteAsync(id);
         }
     }
 }

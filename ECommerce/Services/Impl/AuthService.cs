@@ -1,5 +1,10 @@
 ﻿using ECommerce.Models;
 using ECommerce.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using System.Text;
+using System.Security.Cryptography;
+using System.Security.Claims;
 
 namespace ECommerce.Services.Impl
 {
@@ -7,21 +12,44 @@ namespace ECommerce.Services.Impl
     {
         private readonly IUsuarioService _usuarioService = usuarioService;
 
-        public async Task<Usuario> Login(string username, string pass)
+        public async Task<Usuario?> AuthenticateAsync(string username, string password)
         {
-            var usuario = await _usuarioService.GetUserByUsernameOrEmailAsync(username);
+            var user = await _usuarioService.GetUserByUsernameOrEmailAsync(username);
 
-            // diplock -> Usar BCrypt.Verify en producción
-            if (usuario != null && pass != usuario.Pass)
+            if (user == null)
                 return null;
 
-            return usuario;
+            if (!VerifyPassword(password, user.Pass ?? ""))
+                return null;
+
+            return user;
         }
 
-        public async Task<string> Register(string username, string email, string pass)
+        public async Task<bool> RegisterUserAsync(string username, string email, string password, List<int> roles)
         {
-            List<int> roles = [1]; // diplock -> establecer un rol predeterminado. Un usuario no puede registrarse sin un rol
-            return await _usuarioService.RegistrarUsuarioAsync(username, email, pass, roles);
+            string hashedPassword = HashPassword(password);
+
+            var result = await _usuarioService.RegisterUserAsync(username, email, hashedPassword, roles);
+
+            return !string.IsNullOrEmpty(result);
+        }
+
+        public string HashPassword(string password)
+        {
+            byte[] bytes = SHA256.HashData(Encoding.UTF8.GetBytes(password));
+
+            var builder = new StringBuilder();
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                builder.Append(bytes[i].ToString("x2"));
+            }
+            return builder.ToString();
+        }
+
+        public bool VerifyPassword(string password, string hashedPassword)
+        {
+            string hashOfInput = HashPassword(password);
+            return hashOfInput == hashedPassword;
         }
     }
 }
