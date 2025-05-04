@@ -7,7 +7,7 @@ namespace ECommerce.Services.Interfaces
         Task<Usuario?> GetUserByUsernameOrEmailAsync(string input);
         Task<IEnumerable<Usuario>> ObtenerTodosAsync();
         Task<string> RegistrarUsuarioAsync(string username, string email, string pass, List<int> roles);
-        Task<List<string>> ObtenerRolesUsuarioAsync(int idUsuario);
+        //Task<List<string>> ObtenerRolesUsuarioAsync(int idUsuario);
         Task<string> EliminarUsuarioAsync(int id);
     }
 }

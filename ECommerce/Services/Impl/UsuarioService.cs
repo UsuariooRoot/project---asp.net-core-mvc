@@ -34,10 +34,10 @@ namespace ECommerce.Services.Impl
             return await _usuarioRepository.RegistrarAsync(username, email, pass, roles);
         }
 
-        public async Task<List<string>> ObtenerRolesUsuarioAsync(int idUsuario)
-        {
-            return await _usuarioRepository.ObtenerRolesUsuarioAsync(idUsuario);
-        }
+        //public async Task<List<string>> ObtenerRolesUsuarioAsync(int idUsuario)
+        //{
+        //    return await _usuarioRepository.ObtenerRolesUsuarioAsync(idUsuario);
+        //}
 
         public async Task<string> EliminarUsuarioAsync(int id)
         {

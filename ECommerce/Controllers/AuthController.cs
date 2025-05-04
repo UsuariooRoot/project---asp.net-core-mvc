@@ -35,23 +35,23 @@ namespace ECommerce.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string username, string pass)
         {
-            var usuario = await _authService.Login(username, pass);
+            var user = await _authService.Login(username, pass);
 
-            if (usuario == null)
+            if (user == null)
             {
                 ModelState.AddModelError("", "Usuario o contraseña incorrectos.");
                 return View();
             }
 
-            var roles = await _usuarioService.ObtenerRolesUsuarioAsync(usuario.Id);
+            //var roles = await _usuarioService.ObtenerRolesUsuarioAsync(usuario.Id);
 
             var claims = new List<Claim>
             {
                 new (ClaimTypes.Name, username),
-                new (ClaimTypes.NameIdentifier, usuario.Id.ToString())
+                new (ClaimTypes.NameIdentifier, user.Id.ToString())
             };
 
-            foreach (var rol in roles)
+            foreach (var rol in user.Roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, rol));
             }

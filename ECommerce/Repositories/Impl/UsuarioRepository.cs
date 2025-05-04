@@ -35,47 +35,29 @@ namespace ECommerce.Repositories.Impl
         public async Task<IEnumerable<Usuario>> GetAllAsync()
         {
             List<Usuario> temporal = [];
-            using (var cn = CreateConnection())
-            {
-                await cn.OpenAsync();
-                SqlCommand cmd = new("usp_listar_usuarios", cn)
-                {
-                    CommandType = CommandType.StoredProcedure
-                };
-
-                SqlDataReader dr = await cmd.ExecuteReaderAsync();
-                while (await dr.ReadAsync())
-                {
-                    temporal.Add(DataReaderToUsuario(dr));
-                }
-                await dr.CloseAsync();
-            }
-            return temporal;
-        }
-
-        public async Task<Usuario> GetByIdAsync(int id)
-        {
-            using var cn = CreateConnection();
-
+            
+            using var cn = CreateConnection();            
             await cn.OpenAsync();
-            SqlCommand cmd = new("usp_buscar_usuario", cn)
+            
+            SqlCommand cmd = new("usp_listar_usuarios", cn)
             {
                 CommandType = CommandType.StoredProcedure
             };
-
-            cmd.Parameters.AddWithValue("@id_usuario", id);
-
+            
             SqlDataReader dr = await cmd.ExecuteReaderAsync();
-            if (await dr.ReadAsync())
+            while (await dr.ReadAsync())
             {
-                return DataReaderToUsuario(dr);
+                temporal.Add(DataReaderToUsuario(dr));
             }
-
-            return null;
+                
+            await dr.CloseAsync();
+            return temporal;
         }
 
         public async Task<Usuario?> GetByUsernameAsync(string username)
         {
+            Usuario? user = null;
+
             using var cn = CreateConnection();
             await cn.OpenAsync();
             using var cmd = new SqlCommand("usp_obtener_usuario_por_nombre_o_email", cn)
@@ -91,10 +73,15 @@ namespace ECommerce.Repositories.Impl
             using var dr = await cmd.ExecuteReaderAsync();
             if (await dr.ReadAsync())
             {
-                return DataReaderToUsuario(dr);
+                user = DataReaderToUsuario(dr);
             }
 
-            return null;
+            if (user != null)
+            {
+                user.Roles = await GetUserRolesAsync(user.Id);
+            }
+
+            return user;
         }
 
         public async Task<string> RegistrarAsync(string username, string email, string pass, List<int> roles)
@@ -124,22 +111,24 @@ namespace ECommerce.Repositories.Impl
             }
         }
 
-        public async Task<List<string>> ObtenerRolesUsuarioAsync(int id)
+        private async Task<List<string>> GetUserRolesAsync(int userId)
         {
             var roles = new List<string>();
-
-            using (var cn = CreateConnection())
+            
+            using var cn = CreateConnection();
+            await cn.OpenAsync();
+            
+            using var cmd = new SqlCommand("usp_obtener_roles_usuario", cn)
             {
-                await cn.OpenAsync();
-                using var cmd = new SqlCommand("usp_obtener_roles_usuario", (SqlConnection)cn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@id_usuario", id);
+                CommandType = CommandType.StoredProcedure
+            };
 
-                using var dr = await cmd.ExecuteReaderAsync();
-                while (await dr.ReadAsync())
-                {
-                    roles.Add(dr.GetString(0));
-                }
+            cmd.Parameters.AddWithValue("@id_usuario", userId);
+
+            using var dr = await cmd.ExecuteReaderAsync();
+            while (await dr.ReadAsync())
+            {
+                roles.Add(dr.GetString(0));
             }
 
             return roles;

@@ -6,7 +6,6 @@
         public string? Username {  get; set; }
         public string? Email { get; set; }
         public string? Pass {  get; set; }
-        public string? Role { get; set; }
-        public List<string> Permisos { get; set; } = [];
+        public List<string> Roles { get; set; } = []; // ADMIN, USER, EDITOR
     }
 }
