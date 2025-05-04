@@ -6,6 +6,14 @@
 <div>
     <form method="post" class="login-form">
         <h2>Iniciar sesión</h2>
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="text-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
         <input name="username" placeholder="Usuario" required />
         <input name="pass" type="password" placeholder="Contraseña" required />
         <button type="submit">Iniciar sesión</button>

@@ -30,7 +30,10 @@ namespace ECommerce.Controllers
             }
         }
 
-        public IActionResult Login() => View();
+        public IActionResult Login()
+        {
+            return View();
+        }
 
         [HttpPost]
         public async Task<IActionResult> Login(string username, string pass)
@@ -39,15 +42,13 @@ namespace ECommerce.Controllers
 
             if (user == null)
             {
-                ModelState.AddModelError("", "Usuario o contraseña incorrectos.");
-                return View();
+                TempData["ErrorMessage"] = "Usuario o contraseña incorrectos.";
+                return RedirectToAction("Login");
             }
-
-            //var roles = await _usuarioService.ObtenerRolesUsuarioAsync(usuario.Id);
 
             var claims = new List<Claim>
             {
-                new (ClaimTypes.Name, username),
+                new (ClaimTypes.Name, user.Username ?? "Unknown"),
                 new (ClaimTypes.NameIdentifier, user.Id.ToString())
             };
 
