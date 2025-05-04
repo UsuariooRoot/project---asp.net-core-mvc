@@ -7,6 +7,10 @@ using ECommerce.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddHttpContextAccessor(); // para acceder al HttpContext fuera de los controllers
+
 // Registrar repositorios
 builder.Services.AddScoped<IArticuloRepository, ArticuloRepository>();
 //builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
@@ -28,7 +32,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(options =>
     {
         options.LoginPath = "/Account/Login";
-        options.AccessDeniedPath = "/Account/AccesoDenegado";
+        options.AccessDeniedPath = "/Account/AccessDenied";
         options.ExpireTimeSpan = TimeSpan.FromDays(7);
         options.SlidingExpiration = true;
     });
@@ -36,9 +40,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddAuthorization();
 
 builder.Services.AddSession();
-
-builder.Services.AddControllersWithViews();
-
 
 var app = builder.Build();
 

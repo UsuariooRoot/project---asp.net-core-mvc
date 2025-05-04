@@ -5,24 +5,49 @@ using Microsoft.AspNetCore.Authentication;
 using System.Text;
 using System.Security.Cryptography;
 using System.Security.Claims;
+using System.Reflection;
 
 namespace ECommerce.Services.Impl
 {
-    public class AuthService(IUsuarioService usuarioService) : IAuthService
+    public class AuthService(IUsuarioService usuarioService, IHttpContextAccessor httpContextAccessor) : IAuthService
     {
         private readonly IUsuarioService _usuarioService = usuarioService;
+        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
-        public async Task<Usuario?> AuthenticateAsync(string username, string password)
+        public async Task<bool> AuthenticateAsync(string username, string password, bool rememberMe)
         {
             var user = await _usuarioService.GetUserByUsernameOrEmailAsync(username);
 
             if (user == null)
-                return null;
+                return false;
 
             if (!VerifyPassword(password, user.Pass ?? ""))
-                return null;
+                return false;
 
-            return user;
+            var claims = new List<Claim>
+            {
+                new (ClaimTypes.Name, user.Username ?? "Unknown"),
+                new (ClaimTypes.NameIdentifier, user.Id.ToString())
+            };
+
+            foreach (var rol in user.Roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, rol));
+            }
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+            await _httpContextAccessor.HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                principal,
+                rememberMe
+                    ? new AuthenticationProperties
+                    {
+                        IsPersistent = true, // Para que la cookie persista más allá de la sesión del navegador
+                        ExpiresUtc = DateTime.UtcNow.AddDays(7) // Expiración de la cookie
+                    } : null);
+
+            return true;
         }
 
         public async Task<bool> RegisterUserAsync(string username, string email, string password, List<int> roles)
@@ -50,6 +75,11 @@ namespace ECommerce.Services.Impl
         {
             string hashOfInput = HashPassword(password);
             return hashOfInput == hashedPassword;
+        }
+
+        public async Task LogoutAsync()
+        {
+            await _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
     }
 }

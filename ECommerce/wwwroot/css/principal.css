@@ -66,14 +66,16 @@ nav .dropdown-menu li {
     padding: 10px 20px;
 }
 
-nav .dropdown-menu li a {
+nav .dropdown-menu li a,
+nav .dropdown-menu li label {
     color: white;
     text-decoration: none;
     display: block;
     transition: background-color 0.3s;
 }
 
-nav .dropdown-menu li a:hover {
+nav .dropdown-menu li a:hover,
+nav .dropdown-menu li label:hover{
     background-color: #009688;
     border-radius: 5px;
 }
